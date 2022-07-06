@@ -8,11 +8,8 @@ const MainContainer = () => {
     const [state, setState] = useState(0);
     const [intervalState, setIntervalState] = useState();
     const [user, setUser] = useState(0);
-    const [intervalUser, setIntervalUser] = useState();
     const [review, setReview] = useState(0);
-    const [intervalReview, setIntervalReview] = useState();
     const [save, setSave] = useState(0);
-    const [intervalSave, setIntervalSave] = useState();
 
     useEffect(() => {
         setInit(true);
@@ -27,58 +24,38 @@ const MainContainer = () => {
         }
     }, [init]);
 
+    const counter = (value, max) => {
+        let now = max;
+
+        const handle = setInterval(() => {
+            if (value === 'user') {
+                setUser(Math.ceil(max - now));
+            } else if (value === 'review') {
+                setReview(Math.ceil(max - now));
+            } else if (value === 'save') {
+                setSave(Math.ceil(max - now));
+            }
+            
+            if (now < 0) {
+                clearInterval(handle);
+            }
+    
+            const step = now / 10;
+    
+            now -= step;
+        }, 50);
+    };
+
     useEffect(() => {
         if (state === 1) {
-            setIntervalUser(setInterval(() => {
-                setUser(value => value + 1);
-            }, 1500 / 348));
-
-            setIntervalReview(setInterval(() => {
-                setReview(value => value + 1);
-            }, 1500 / 19));
-
-            setIntervalSave(setInterval(() => {
-                setSave(value => value + 1);
-            }, 1500 / 648));
+            counter('user', 350);
+            counter('review', 21);
+            counter('save', 650);
         }
         if (state >= 2) {
             clearInterval(intervalState);
         }
     }, [state]);
-
-    useEffect(() => {
-        if (user === 348) {
-            clearInterval(intervalUser);
-            setIntervalUser(setInterval(() => {
-                setUser(value => value + 1);
-            }, 500 / 2));
-        }
-        if (user === 350) {
-            clearInterval(intervalUser);
-        }
-    }, [user]);
-    useEffect(() => {
-        if (review === 19) {
-            clearInterval(intervalReview);
-            setIntervalReview(setInterval(() => {
-                setReview(value => value + 1);
-            }, 500 / 2));
-        }
-        if (review === 21) {
-            clearInterval(intervalReview);
-        }
-    }, [review]);
-    useEffect(() => {
-        if (save === 648) {
-            clearInterval(intervalSave);
-            setIntervalSave(setInterval(() => {
-                setSave(value => value + 1);
-            }, 500 / 2));
-        }
-        if (save === 650) {
-            clearInterval(intervalSave);
-        }
-    }, [save]);
 
     return (
         <MainWrapper>
